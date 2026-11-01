@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Check, Clock, Mail, Phone } from 'lucide-react';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
@@ -24,6 +24,16 @@ const INITIAL_ERRORS = {
   guests: '',
 };
 
+// Replace with your own free Formspree form ID to receive real emails.
+const FORMSPREE_ID = 'YOUR_FORMSPREE_FORM_ID';
+const FORMSPREE_ENDPOINT = `https://formspree.io/f/${FORMSPREE_ID}`;
+
+const todayISO = () => {
+  const now = new Date();
+  const offset = now.getTimezoneOffset();
+  return new Date(now.getTime() - offset * 60000).toISOString().slice(0, 10);
+};
+
 function validate(values) {
   const errors = { ...INITIAL_ERRORS };
   if (!values.name.trim()) errors.name = 'Please tell us your name.';
@@ -44,30 +54,44 @@ function validate(values) {
 export default function ReservationSection() {
   const [values, setValues] = useState(INITIAL_VALUES);
   const [errors, setErrors] = useState(INITIAL_ERRORS);
-  const [status, setStatus] = useState('idle'); // idle | loading | success
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
   const [confirmed, setConfirmed] = useState(null);
 
   const setValue = (e) => {
     const { name, value } = e.target;
     setValues((v) => ({ ...v, [name]: value }));
     if (errors[name]) setErrors((err) => ({ ...err, [name]: '' }));
+    if (status === 'error') setStatus('idle');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const nextErrors = validate(values);
     setErrors(nextErrors);
     if (Object.values(nextErrors).some((err) => err)) return;
 
     setStatus('loading');
-    const form = e.target;
-    form.action = 'https://formspree.io/f/YOUR_FORMSPREE_FORM_ID';
-    form.method = 'POST';
-    setTimeout(() => {
-      form.submit();
+
+    // Demo mode: no Formspree ID configured yet, so confirm locally without leaving the page.
+    if (FORMSPREE_ID === 'YOUR_FORMSPREE_FORM_ID') {
+      await new Promise((resolve) => setTimeout(resolve, 700));
       setConfirmed({ ...values });
       setStatus('success');
-    }, 700);
+      return;
+    }
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ ...values, _subject: 'New reservation request — Ember & Oak' }),
+      });
+      if (!response.ok) throw new Error('Request failed');
+      setConfirmed({ ...values });
+      setStatus('success');
+    } catch {
+      setStatus('error');
+    }
   };
 
   const reset = () => {
@@ -96,7 +120,7 @@ export default function ReservationSection() {
       <div className="mx-auto grid w-full max-w-7xl items-start gap-14 px-6 md:px-10 lg:grid-cols-5 lg:gap-20 lg:px-12">
         <div className="lg:col-span-2">
           <p className="eyebrow">Reservations</p>
-          <h2 className="mt-4 font-serif text-4xl leading-tight sm:text-5xl">
+          <h2 className="mt-4 font-serif text-[clamp(2.25rem,5vw,3rem)] leading-tight">
             Reserve a table by the fire
           </h2>
           <div aria-hidden="true" className="mt-6 h-px w-16 bg-gold" />
@@ -128,7 +152,7 @@ export default function ReservationSection() {
         <div className="lg:col-span-3">
           <AnimatePresence mode="wait">
             {status === 'success' ? (
-              <motion.div
+              <m.div
                 key="success"
                 className="rounded-3xl border border-ember/40 bg-charcoal-panel p-8 text-center sm:p-12"
                 initial={{ opacity: 0, scale: 0.94 }}
@@ -136,14 +160,14 @@ export default function ReservationSection() {
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
               >
-                <motion.div
+                <m.div
                   className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-ember"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', stiffness: 260, damping: 18, delay: 0.1 }}
                 >
                   <Check className="h-9 w-9 text-cream" aria-hidden="true" />
-                </motion.div>
+                </m.div>
                 <h3 className="mt-8 font-serif text-3xl">You&rsquo;re on the list</h3>
                 <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-cream-muted">
                   Thank you, {confirmed?.name?.split(' ')[0] || 'friend'}. Your table at the fire is
@@ -171,9 +195,9 @@ export default function ReservationSection() {
                     Make another reservation
                   </Button>
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="form"
                 className="rounded-3xl border border-cream/10 bg-charcoal-panel p-6 sm:p-10"
                 initial={{ opacity: 0, y: 24 }}
@@ -186,7 +210,12 @@ export default function ReservationSection() {
                   Fields marked <span className="text-red-300">*</span> are required.
                 </p>
 
-                <form className="mt-8 grid gap-5 sm:grid-cols-2" onSubmit={handleSubmit} noValidate>
+                <form
+                  className="mt-8 grid gap-5 sm:grid-cols-2"
+                  onSubmit={handleSubmit}
+                  noValidate
+                  aria-busy={status === 'loading'}
+                >
                   <input type="hidden" name="form-name" value="ember-oak-reservation" />
                   <div className="sm:col-span-2">
                     <Input
@@ -238,7 +267,7 @@ export default function ReservationSection() {
                       name="guests"
                       value={values.guests}
                       onChange={setValue}
-                      className="h-12 w-full rounded-xl border border-cream/15 bg-charcoal-panel px-4 text-[15px] text-cream focus:border-ember focus:outline-none"
+                      className="h-12 w-full rounded-xl border border-cream/15 bg-charcoal-panel px-4 text-base text-cream focus:border-ember focus:outline-none"
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
                         <option key={n} value={n} className="bg-charcoal-panel">
@@ -253,6 +282,8 @@ export default function ReservationSection() {
                       label="Date"
                       name="date"
                       type="date"
+                      min={todayISO()}
+                      autoComplete="off"
                       value={values.date}
                       onChange={setValue}
                       error={errors.date}
@@ -264,6 +295,7 @@ export default function ReservationSection() {
                       label="Time"
                       name="time"
                       type="time"
+                      autoComplete="off"
                       value={values.time}
                       onChange={setValue}
                       error={errors.time}
@@ -287,16 +319,25 @@ export default function ReservationSection() {
                       value={values.notes}
                       onChange={setValue}
                       placeholder="Allergies, celebrations, window seat…"
-                      className="h-auto w-full rounded-xl border border-cream/15 bg-charcoal-panel px-4 py-3 text-[15px] text-cream placeholder:text-cream-faint focus:border-ember focus:outline-none"
+                      className="h-auto w-full rounded-xl border border-cream/15 bg-charcoal-panel px-4 py-3 text-base text-cream placeholder:text-cream-faint focus:border-ember focus:outline-none"
                     />
                   </div>
 
                   <div className="sm:col-span-2">
+                    {status === 'error' ? (
+                      <p
+                        role="alert"
+                        className="mb-4 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+                      >
+                        We couldn&rsquo;t send your request just now. Please try again, or call us
+                        at {SITE.phone}.
+                      </p>
+                    ) : null}
                     {status === 'loading' ? (
                       <button
                         type="submit"
                         disabled
-                        className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-ember/60 px-9 text-base font-medium text-cream sm:w-auto"
+                        className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-ember-dark/70 px-9 text-base font-medium text-cream sm:w-auto"
                       >
                         <span
                           className="h-4 w-4 animate-spin rounded-full border-2 border-cream/40 border-t-cream"
@@ -311,7 +352,7 @@ export default function ReservationSection() {
                     )}
                   </div>
                 </form>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>

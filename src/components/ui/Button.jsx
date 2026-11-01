@@ -1,17 +1,16 @@
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
 const VARIANTS = {
-  primary: 'bg-ember text-cream shadow-glow hover:bg-ember-dark focus-visible:bg-ember-dark',
+  primary: 'bg-ember-dark text-cream shadow-glow hover:bg-[#8C3A15] focus-visible:bg-[#8C3A15]',
   outline:
     'border border-cream/25 bg-transparent text-cream hover:border-ember hover:text-ember focus-visible:border-ember',
   ghost: 'bg-transparent text-cream/80 hover:text-cream focus-visible:text-cream',
 };
 
 const SIZES = {
-  sm: 'h-10 px-5 text-sm',
-  md: 'h-12 px-7 text-[15px]',
+  sm: 'h-11 px-5 text-sm',
+  md: 'h-12 px-7 text-base',
   lg: 'h-14 px-9 text-base',
 };
 
@@ -21,25 +20,15 @@ export default function Button({
   size = 'md',
   className,
   children,
-  type,
+  type = 'button',
   ...rest
 }) {
-  const navigate = useNavigate();
-
   const classes = cn(
-    'inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors duration-300',
+    'btn-lift relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-full font-medium',
     VARIANTS[variant],
     SIZES[size],
     className
   );
-
-  const motionProps = {
-    whileHover: { scale: 1.03 },
-    whileTap: { scale: 0.97 },
-    transition: { type: 'spring', stiffness: 400, damping: 17 },
-    type,
-    ...rest,
-  };
 
   const content = (
     <>
@@ -47,25 +36,23 @@ export default function Button({
       {variant === 'primary' ? (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-cream/25 to-transparent -translate-x-full transition-transform duration-700 hover:translate-x-full"
+          className="btn-shine pointer-events-none absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-cream/25 to-transparent"
         />
       ) : null}
     </>
   );
 
-  const motionClass = cn('group relative overflow-hidden', classes);
-
   if (to) {
     return (
-      <motion.button className={motionClass} {...motionProps} onClick={() => navigate(to)}>
+      <Link to={to} className={classes} {...rest}>
         {content}
-      </motion.button>
+      </Link>
     );
   }
 
   return (
-    <motion.button className={motionClass} {...motionProps}>
+    <button type={type} className={classes} {...rest}>
       {content}
-    </motion.button>
+    </button>
   );
 }

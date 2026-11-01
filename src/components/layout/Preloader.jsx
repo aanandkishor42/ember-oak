@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Flame } from 'lucide-react';
 
 export default function Preloader({ onDone }) {
@@ -12,7 +12,7 @@ export default function Preloader({ onDone }) {
     let raf = null;
     const tick = (now) => {
       const elapsed = now - start;
-      const p = Math.min(100, Math.round((elapsed / 2000) * 100));
+      const p = Math.min(100, Math.round((elapsed / 1200) * 100));
       setProgress(p);
       if (p < 100) {
         raf = requestAnimationFrame(tick);
@@ -24,7 +24,7 @@ export default function Preloader({ onDone }) {
 
   useEffect(() => {
     if (progress >= 100 && !exiting) {
-      const t = setTimeout(() => setExiting(true), 250);
+      const t = setTimeout(() => setExiting(true), 150);
       return () => clearTimeout(t);
     }
   }, [progress, exiting]);
@@ -38,13 +38,13 @@ export default function Preloader({ onDone }) {
   return (
     <AnimatePresence>
       {!exiting && (
-        <motion.div
+        <m.div
           className="fixed inset-0 z-[110] flex flex-col items-center justify-center bg-charcoal"
           exit={{ y: '-100%' }}
-          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
           onAnimationComplete={handleAnimationComplete}
         >
-          <motion.div
+          <m.div
             className="flex flex-col items-center gap-6"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -55,18 +55,18 @@ export default function Preloader({ onDone }) {
             <p className="font-serif text-4xl tracking-[0.34em] text-ember-soft">
               &amp; <span className="italic">OAK</span>
             </p>
-          </motion.div>
+          </m.div>
           <p className="mt-10 font-sans text-[11px] uppercase tracking-[0.4em] text-cream-faint">
             {Math.min(progress, 100)}%
           </p>
-        </motion.div>
+        </m.div>
       )}
       {exiting && (
-        <motion.div
+        <m.div
           className="fixed inset-0 z-[110] bg-charcoal"
           initial={{ y: 0 }}
           animate={{ y: '-100%' }}
-          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
           onAnimationComplete={handleAnimationComplete}
         />
       )}

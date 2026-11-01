@@ -1,44 +1,23 @@
+import { srcSet, unsplash } from '../utils/images';
+
+const galleryItem = (id, photoId, caption, width, height) => ({
+  id,
+  src: unsplash(photoId, 900),
+  srcSet: srcSet(photoId, [400, 600, 900, 1200]),
+  width,
+  height,
+  caption,
+});
+
 const GALLERY_ITEMS = [
-  {
-    id: 'g1',
-    src: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80',
-    caption: 'The dining room at dusk',
-  },
-  {
-    id: 'g2',
-    src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80',
-    caption: 'Long oak tables by the fire',
-  },
-  {
-    id: 'g3',
-    src: 'https://images.unsplash.com/photo-1559329352-11d035aa65de?auto=format&fit=crop&w=900&q=80',
-    caption: 'Fire-oven plates',
-  },
-  {
-    id: 'g4',
-    src: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=900&q=80',
-    caption: 'The open kitchen',
-  },
-  {
-    id: 'g5',
-    src: 'https://images.unsplash.com/photo-1432139555190-58524dae6a55?auto=format&fit=crop&w=900&q=80',
-    caption: 'Chef Marisol at the pass',
-  },
-  {
-    id: 'g6',
-    src: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=900&q=80',
-    caption: 'Wood-fired flatbread',
-  },
-  {
-    id: 'g7',
-    src: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80',
-    caption: 'The signature ribeye',
-  },
-  {
-    id: 'g8',
-    src: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=900&q=80',
-    caption: 'Dessert plates from the hearth',
-  },
+  galleryItem('g1', 'photo-1552566626-52f8b828add9', 'The dining room at dusk', 900, 600),
+  galleryItem('g2', 'photo-1517248135467-4c7edcad34c4', 'Long oak tables by the fire', 900, 600),
+  galleryItem('g3', 'photo-1555939594-58d7cb561ad1', 'Fire-oven plates', 900, 600),
+  galleryItem('g4', 'photo-1556910103-1c02745aae4d', 'The open kitchen', 900, 600),
+  galleryItem('g5', 'photo-1432139555190-58524dae6a55', 'Chef Marisol at the pass', 900, 596),
+  galleryItem('g6', 'photo-1490645935967-10de6ba17061', 'Wood-fired flatbread', 900, 612),
+  galleryItem('g7', 'photo-1544025162-d76694265947', 'The signature ribeye', 900, 601),
+  galleryItem('g8', 'photo-1476224203421-9ac39bcb3327', 'Dessert plates from the hearth', 900, 601),
 ];
 
 export { GALLERY_ITEMS };

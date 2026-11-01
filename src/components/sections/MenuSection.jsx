@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { AnimatePresence, m } from 'framer-motion';
 import { Flame, Leaf, Sparkles } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 import Badge from '../ui/Badge';
@@ -7,7 +7,23 @@ import { MENU_CATEGORIES, getDishesByCategory } from '../../data/menu';
 
 export default function MenuSection() {
   const [active, setActive] = useState(MENU_CATEGORIES[0]);
+  const tabsRef = useRef([]);
   const dishes = getDishesByCategory(active);
+  const activeIndex = MENU_CATEGORIES.indexOf(active);
+
+  const onTabKeyDown = (event, index) => {
+    const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+    let nextIndex = index;
+    if (event.key === 'ArrowRight') nextIndex = (index + 1) % MENU_CATEGORIES.length;
+    if (event.key === 'ArrowLeft')
+      nextIndex = (index - 1 + MENU_CATEGORIES.length) % MENU_CATEGORIES.length;
+    if (event.key === 'Home') nextIndex = 0;
+    if (event.key === 'End') nextIndex = MENU_CATEGORIES.length - 1;
+    setActive(MENU_CATEGORIES[nextIndex]);
+    tabsRef.current[nextIndex]?.focus();
+  };
 
   return (
     <section id="menu" className="relative overflow-hidden py-24 md:py-32">
@@ -25,20 +41,27 @@ export default function MenuSection() {
         <div
           role="tablist"
           aria-label="Menu categories"
-          className="mt-14 flex flex-wrap justify-center gap-3"
+          className="mt-14 flex flex-wrap justify-center gap-2 sm:gap-3"
         >
-          {MENU_CATEGORIES.map((category) => {
+          {MENU_CATEGORIES.map((category, index) => {
             const isActive = category === active;
             return (
               <button
                 key={category}
+                ref={(node) => {
+                  tabsRef.current[index] = node;
+                }}
                 type="button"
                 role="tab"
+                id={`menu-tab-${index}`}
                 aria-selected={isActive}
+                aria-controls="menu-panel"
+                tabIndex={isActive ? 0 : -1}
                 onClick={() => setActive(category)}
-                className={`rounded-full border px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember ${
+                onKeyDown={(event) => onTabKeyDown(event, index)}
+                className={`inline-flex min-h-[44px] items-center rounded-full border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember sm:px-6 ${
                   isActive
-                    ? 'border-ember bg-ember text-cream shadow-glow'
+                    ? 'border-ember bg-ember-dark text-cream shadow-glow'
                     : 'border-cream/15 text-cream-muted hover:border-ember/60 hover:text-cream'
                 }`}
               >
@@ -48,9 +71,14 @@ export default function MenuSection() {
           })}
         </div>
 
-        <div className="mt-14">
+        <div
+          className="mt-14"
+          role="tabpanel"
+          id="menu-panel"
+          aria-labelledby={`menu-tab-${activeIndex}`}
+        >
           <AnimatePresence mode="wait">
-            <motion.div
+            <m.div
               key={active}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -59,7 +87,7 @@ export default function MenuSection() {
             >
               <ul className="grid gap-5 md:grid-cols-2">
                 {dishes.map((dish, index) => (
-                  <motion.li
+                  <m.li
                     key={dish.id}
                     initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -94,10 +122,10 @@ export default function MenuSection() {
                         ) : null}
                       </div>
                     )}
-                  </motion.li>
+                  </m.li>
                 ))}
               </ul>
-            </motion.div>
+            </m.div>
           </AnimatePresence>
         </div>
       </div>

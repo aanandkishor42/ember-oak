@@ -30,17 +30,31 @@ A single-page-worthy multi-route experience for an upscale fire-kitchen restaura
 - Auto-playing testimonial carousel with star ratings and controls.
 - Reservation form with real validation, inline errors, loading state, animated success state.
 - Hours, location, map placeholder, newsletter signup, footer with socials and quick links.
-- Preloader, page transitions, back-to-top, scroll reveal animations, marquee, custom scrollbar,
-  grain overlay, focus rings, `prefers-reduced-motion` support.
+- Preloader (skipped on repeat visits / reduced motion), page transitions, back-to-top, scroll reveal
+  animations, marquee, custom scrollbar, grain overlay, focus rings, `prefers-reduced-motion` support.
+
+## Accessibility & performance
+
+- WCAG AA colour contrast on every interactive surface (ember buttons use the darker `#A8481A`).
+- Full keyboard support: skip link, roving tabindex on menu tabs, focus-trapped mobile menu and
+  lightbox, ESC to close, focus restored to the trigger.
+- Touch targets are at least 44×44 px; hover-only effects are gated behind
+  `@media (hover: hover) and (pointer: fine)`.
+- Form inputs are 16 px+ to stop iOS zoom, with correct `type`, `inputmode` and `autocomplete`.
+- Layout is fluid from 360 px to 2560 px with `clamp()` type, safe-area insets, `dvh` units and
+  `content` that never scrolls horizontally.
+- Route-level code splitting, `LazyMotion`, deferred below-the-fold sections, `srcset`/`sizes` on
+  every remote image, lazy loading, and a static brand splash that paints before React boots.
+- Lighthouse (mobile): Accessibility 100, Best Practices 100, SEO 100, CLS 0.
 
 ## Tech Stack
 
 - React 18 + Vite 5
 - Tailwind CSS 3 (custom warm dark theme)
-- Framer Motion 11 (all animation)
-- React Router 6 (4 routes)
+- Framer Motion 11 via `LazyMotion` (DOM animation features only)
+- React Router 6 (4 routes, lazy-loaded)
 - lucide-react (icons)
-- Google Fonts: Playfair Display + Inter
+- Self-hosted variable fonts: Playfair Display + Inter (latin subsets in `public/fonts`)
 - ESLint + Prettier
 
 ## Getting Started
@@ -63,14 +77,16 @@ npm run preview
 
 ```
 ember-oak/
-├── public/               # favicon, _redirects (Netlify SPA fallback)
+├── public/               # favicon + app icons, fonts/, manifest, robots.txt,
+│                         # sitemap.xml, _redirects (Netlify SPA fallback)
 ├── src/
 │   ├── components/
 │   │   ├── layout/       # Navbar, MobileMenu, Footer, Preloader, BackToTop
 │   │   ├── sections/     # Hero, Marquee, About, SignatureDishes, MenuSection,
 │   │   │                 # ChefSpecial, ChefBand, Gallery, Testimonials,
 │   │   │                 # ReservationSection, HoursLocation
-│   │   └── ui/           # Button, SectionHeading, Badge, Input, DishCard, Modal, Container
+│   │   └── ui/           # Button, SectionHeading, Badge, Input, DishCard, Modal,
+│   │                     # Container, DeferredSection
 │   ├── data/             # menu, testimonials, gallery, site content
 │   ├── hooks/            # useInView, useScrollPosition, useMediaQuery
 │   ├── pages/            # Home, Menu, Reservations, About
@@ -79,7 +95,7 @@ ember-oak/
 ├── index.html
 ├── tailwind.config.js
 ├── postcss.config.js
-├── vite.config.js
+├── vite.config.mjs
 └── vercel.json
 ```
 
@@ -112,16 +128,17 @@ vercel --prod
 
 ## Real email sending (free, optional)
 
-The reservation form is wired to a **Formspree** endpoint placeholder:
+The reservation form posts to a **Formspree** endpoint with `fetch` (no backend, no page reload) and
+falls back to a local demo confirmation while the placeholder ID is in place:
 
-- Form action: `https://formspree.io/f/YOUR_FORMSPREE_FORM_ID` (`src/components/sections/ReservationSection.jsx`)
+- Endpoint constant: `FORMSPREE_ID` in `src/components/sections/ReservationSection.jsx`
 
 To go live with real reservations-by-email (free tier, no backend):
 
 1. Sign up free at [formspree.io](https://formspree.io).
 2. Create a new form (name: `Ember & Oak Reservation`).
-3. Copy your form endpoint ID (e.g. `https://formspree.io/f/abc123`).
-4. Replace `YOUR_FORMSPREE_FORM_ID` in the form action.
+3. Copy your form endpoint ID (e.g. `abc123` from `https://formspree.io/f/abc123`).
+4. Replace `YOUR_FORMSPREE_FORM_ID` in `ReservationSection.jsx`.
 
 ## How to Customize for a Client
 
@@ -129,7 +146,8 @@ To go live with real reservations-by-email (free tier, no backend):
 2. **Colors**: tokens live in `tailwind.config.js` (`charcoal`, `ember`, `gold`, `cream`) and `src/index.css` (`.eyebrow`, `.grain`).
 3. **Menu**: dishes live in `src/data/menu.js` (categories, badges, prices, descriptions, images).
 4. **Images**: swap Unsplash IDs in `src/utils/images.js` and `src/data/gallery.js`.
-5. **Fonts / type**: Google Fonts link in `index.html`; heading font in `tailwind.config.js`.
+5. **Fonts / type**: self-hosted files live in `public/fonts` and are declared at the top of
+   `src/index.css`; heading font family is set in `tailwind.config.js`.
 
 ## Scripts
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import {
   ArrowUpRight,
   Check,
@@ -37,8 +37,8 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-cream/10 bg-charcoal-deep">
-      <div className="mx-auto w-full max-w-7xl px-6 py-16 md:px-10 lg:px-12">
-        <div className="grid gap-12 lg:grid-cols-12">
+      <div className="mx-auto w-full max-w-7xl px-6 pb-[calc(4rem+env(safe-area-inset-bottom))] pt-16 md:px-10 lg:px-12">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <p className="font-serif text-2xl tracking-[0.2em] text-cream">
               EMBER <span className="text-ember">&</span> OAK
@@ -47,19 +47,19 @@ export default function Footer() {
               {SITE.tagline} A modern fire kitchen where oak smoke and open flame turn humble
               ingredients into quiet luxury.
             </p>
-            <div className="mt-6 flex gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               {SOCIALS.map(({ label, Icon }) => (
-                <motion.a
+                <m.a
                   key={label}
                   href="#"
                   aria-label={label}
                   whileHover={{ scale: 1.12, rotate: -6 }}
                   whileTap={{ scale: 0.94 }}
                   onClick={(e) => e.preventDefault()}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-cream/15 text-cream-muted transition-colors hover:border-ember hover:text-ember"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-cream/15 text-cream-muted transition-colors hover:border-ember hover:text-ember"
                 >
                   <Icon className="h-4 w-4" aria-hidden="true" />
-                </motion.a>
+                </m.a>
               ))}
             </div>
           </div>
@@ -76,7 +76,7 @@ export default function Footer() {
                 <li key={link.to}>
                   <Link
                     to={link.to}
-                    className="group inline-flex items-center gap-1 text-sm text-cream-muted transition-colors hover:text-ember"
+                    className="group inline-flex min-h-[44px] items-center gap-1 text-sm text-cream-muted transition-colors hover:text-ember"
                   >
                     {link.label}
                     <ArrowUpRight
@@ -126,6 +126,7 @@ export default function Footer() {
                   id="newsletter-email"
                   name="email"
                   type="email"
+                  inputMode="email"
                   autoComplete="email"
                   placeholder="you@example.com"
                   value={email}
@@ -133,11 +134,11 @@ export default function Footer() {
                     setEmail(e.target.value);
                     if (newsletterState === 'error') setNewsletterState('idle');
                   }}
-                  className="h-11 w-full rounded-full border border-cream/15 bg-charcoal-panel px-4 text-sm text-cream placeholder:text-cream-faint focus:border-ember focus:outline-none"
+                  className="h-11 min-w-0 flex-1 rounded-full border border-cream/15 bg-charcoal-panel px-4 text-base text-cream placeholder:text-cream-faint focus:border-ember focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="h-11 rounded-full bg-ember px-5 text-xs font-semibold uppercase tracking-[0.18em] text-cream transition-colors hover:bg-ember-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                  className="h-11 shrink-0 rounded-full bg-ember-dark px-5 text-xs font-semibold uppercase tracking-[0.18em] text-cream transition-colors hover:bg-[#8C3A15] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                 >
                   Join
                 </button>

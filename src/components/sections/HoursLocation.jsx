@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { SITE } from '../../data/site';
 
@@ -12,7 +12,9 @@ export default function HoursLocation() {
       <div className="mx-auto grid w-full max-w-7xl items-start gap-14 px-6 md:px-10 lg:grid-cols-5 lg:gap-20 lg:px-12">
         <div className="lg:col-span-2">
           <p className="eyebrow">Visit</p>
-          <h2 className="mt-4 font-serif text-4xl leading-tight sm:text-5xl">Find the fire</h2>
+          <h2 className="mt-4 font-serif text-[clamp(2.25rem,5vw,3rem)] leading-tight">
+            Find the fire
+          </h2>
           <div aria-hidden="true" className="mt-6 h-px w-16 bg-gold" />
 
           <div className="mt-12 space-y-6">
@@ -61,7 +63,7 @@ export default function HoursLocation() {
               </p>
             </div>
           </div>
-          <motion.a
+          <m.a
             href="https://maps.google.com/?q=128+Hearthstone+Lane+Portland+OR"
             target="_blank"
             rel="noopener noreferrer"
@@ -71,7 +73,7 @@ export default function HoursLocation() {
           >
             <MapPin className="h-4 w-4" aria-hidden="true" />
             Get directions
-          </motion.a>
+          </m.a>
         </div>
       </div>
     </section>

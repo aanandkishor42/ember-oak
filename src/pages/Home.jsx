@@ -8,6 +8,7 @@ import Gallery from '../components/sections/Gallery';
 import Testimonials from '../components/sections/Testimonials';
 import ReservationSection from '../components/sections/ReservationSection';
 import HoursLocation from '../components/sections/HoursLocation';
+import DeferredSection from '../components/ui/DeferredSection';
 
 export default function HomePage() {
   return (
@@ -18,10 +19,14 @@ export default function HomePage() {
       <SignatureDishes />
       <MenuSection />
       <ChefSpecial />
-      <Gallery />
-      <Testimonials />
-      <ReservationSection />
-      <HoursLocation />
+      <DeferredSection minHeight="80vh">
+        <Gallery />
+        <Testimonials />
+      </DeferredSection>
+      <DeferredSection minHeight="90vh">
+        <ReservationSection />
+        <HoursLocation />
+      </DeferredSection>
     </>
   );
 }

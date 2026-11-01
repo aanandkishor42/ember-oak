@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 const ITEMS = ['Wood-Fired', 'Oak-Smoked', 'Open Flame', 'Handcrafted', 'Est. 2012'];
 
 export default function Marquee({ items = ITEMS }) {
@@ -7,12 +5,7 @@ export default function Marquee({ items = ITEMS }) {
 
   return (
     <div className="relative overflow-hidden border-y border-cream/10 bg-charcoal-deep py-6">
-      <motion.div
-        className="flex w-max items-center"
-        aria-hidden="true"
-        animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 48, ease: 'linear', repeat: Infinity }}
-      >
+      <div className="flex w-max items-center motion-safe:animate-marquee" aria-hidden="true">
         {[0, 1].map((copy) => (
           <div key={copy} className="flex shrink-0 items-center">
             {row.map((item, i) => (
@@ -25,7 +18,7 @@ export default function Marquee({ items = ITEMS }) {
             ))}
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

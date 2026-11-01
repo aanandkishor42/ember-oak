@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 import { Menu as MenuIcon, X } from 'lucide-react';
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import Button from '../ui/Button';
@@ -20,40 +20,33 @@ export default function Navbar() {
   const { scrollYProgress } = useScroll();
   const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [mobileOpen]);
-
   const linkClass = ({ isActive }) =>
-    `group relative py-2 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 ${
+    `group relative inline-flex min-h-[44px] items-center py-2 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 ${
       isActive ? 'text-cream' : 'text-cream-muted hover:text-cream'
     }`;
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+      className={`fixed inset-x-0 top-[env(safe-area-inset-top)] z-50 transition-all duration-500 ${
         scrolled || mobileOpen
-          ? 'border-b border-cream/10 bg-charcoal/80 backdrop-blur-xl'
+          ? 'border-b border-cream/10 bg-charcoal/80 backdrop-blur-md md:backdrop-blur-xl'
           : 'border-b border-transparent bg-transparent'
       }`}
     >
-      <motion.div
+      <m.div
         aria-hidden="true"
         className="fixed left-0 top-0 h-[2px] origin-left bg-ember"
         style={{ scaleX }}
       />
 
       <nav
-        className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 md:px-10 lg:px-12"
+        className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-6 md:px-10 lg:px-12"
         aria-label="Primary"
       >
         <Link
           to="/"
           onClick={() => setMobileOpen(false)}
-          className="font-serif text-xl tracking-[0.24em] text-cream transition-colors hover:text-ember-soft"
+          className="inline-flex min-h-[44px] items-center py-2 font-serif text-lg tracking-[0.2em] text-cream transition-colors hover:text-ember-soft sm:text-xl sm:tracking-[0.24em]"
         >
           EMBER <span className="text-ember">&</span> OAK
         </Link>
@@ -66,8 +59,8 @@ export default function Navbar() {
                   {link.label}
                   <span
                     aria-hidden="true"
-                    className={`absolute bottom-0 left-0 h-px w-full origin-left bg-ember transition-transform duration-300 ${
-                      isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                    className={`nav-underline absolute bottom-0 left-0 h-px w-full origin-left bg-ember transition-transform duration-300 ${
+                      isActive ? 'nav-underline--active' : ''
                     }`}
                   />
                 </span>

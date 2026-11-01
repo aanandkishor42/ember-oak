@@ -19,7 +19,7 @@ export default function Input({ label, error, hint, className, id, ...rest }) {
         aria-invalid={Boolean(error)}
         aria-describedby={describedBy}
         className={cn(
-          'h-12 w-full rounded-xl border bg-charcoal-panel px-4 text-[15px] text-cream transition-colors duration-300 placeholder:text-cream-faint focus:border-ember focus:outline-none',
+          'h-12 w-full rounded-xl border bg-charcoal-panel px-4 text-base text-cream transition-colors duration-300 placeholder:text-cream-faint focus:border-ember focus:outline-none',
           error ? 'border-red-500/70 focus:border-red-500' : 'border-cream/15'
         )}
         {...rest}

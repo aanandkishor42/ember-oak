@@ -1,3 +1,73 @@
+/* Self-hosted web fonts (latin subsets). */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/inter-300-600-normal-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/inter-300-600-normal-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/playfair-display-400-600-italic-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/playfair-display-400-600-italic-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/playfair-display-400-600-normal-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/playfair-display-400-600-normal-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,11 +76,35 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 6rem;
+    color-scheme: dark;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #3a2a20 #0f0d0c;
   }
 
   body {
     @apply bg-charcoal text-cream antialiased;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
+    min-height: 100%;
+  }
+
+  @supports (overflow: clip) {
+    html,
+    body {
+      overflow-x: clip;
+    }
+  }
+
+  img,
+  video,
+  svg {
+    max-width: 100%;
+  }
+
+  img,
+  video {
+    height: auto;
   }
 
   h1,
@@ -18,6 +112,25 @@
   h3,
   h4 {
     @apply font-serif text-cream;
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: max(1rem, 16px);
   }
 
   ::selection {
@@ -47,6 +160,140 @@
       42px 42px,
       240px 240px,
       240px 240px;
+  }
+}
+
+@layer utilities {
+  .min-h-dvh {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .h-90dvh {
+    height: 90vh;
+    height: 90dvh;
+  }
+
+  .pb-safe {
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  }
+
+  .pt-safe {
+    padding-top: calc(1.5rem + env(safe-area-inset-top));
+  }
+}
+
+/* Nav underline: hover only on devices with a real pointer (hover: hover) and fine pointer */
+.nav-underline {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.nav-underline.nav-underline--active {
+  transform: scaleX(1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .nav-underline:hover {
+    transform: scaleX(1);
+  }
+}
+
+/* Image zoom + reveal effects only where a real mouse is present */
+.card-media {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-media {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-overlay,
+.gallery-caption {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.gallery-overlay {
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-zoom:hover .card-media {
+    transform: scale(1.08);
+  }
+
+  .gallery-card:hover .gallery-media {
+    transform: scale(1.05);
+  }
+
+  .gallery-card:hover .gallery-overlay {
+    opacity: 1;
+  }
+
+  .gallery-card:hover .gallery-caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .group:hover .btn-shine {
+    transform: translateX(100%);
+  }
+}
+
+/* Touch devices: keep captions visible and skip hover-only transforms */
+@media (hover: none) {
+  .gallery-overlay {
+    opacity: 0.9;
+  }
+
+  .gallery-caption {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.btn-shine {
+  transform: translateX(-100%);
+  transition: transform 0.7s ease;
+}
+
+.btn-lift {
+  transition:
+    transform 0.25s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+.btn-lift:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-lift:hover {
+    transform: translateY(-1px) scale(1.02);
+  }
+}
+
+/* Native date/time pickers on a dark surface */
+input[type='date'],
+input[type='time'],
+input[type='datetime-local'] {
+  color-scheme: dark;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator,
+input[type='time']::-webkit-calendar-picker-indicator,
+input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  filter: invert(0.75) sepia(0.35) saturate(3) hue-rotate(340deg);
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+/* Subtler grain on small screens to protect mobile performance */
+@media (max-width: 768px) {
+  .grain {
+    opacity: 0.03;
   }
 }
 

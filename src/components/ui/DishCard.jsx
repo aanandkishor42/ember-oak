@@ -1,12 +1,19 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { cn } from '../../utils/cn';
 import Badge from './Badge';
 
+const dishSrcSet = (src) => {
+  if (!src || !src.includes('images.unsplash.com') || !/[?&]w=\d+/.test(src)) return undefined;
+  return [400, 600, 900, 1200]
+    .map((width) => `${src.replace(/([?&])w=\d+/, `$1w=${width}`)} ${width}w`)
+    .join(', ');
+};
+
 export default function DishCard({ dish, className }) {
   return (
-    <motion.article
+    <m.article
       className={cn(
-        'group flex h-full flex-col overflow-hidden rounded-2xl border border-cream/10 bg-charcoal-panel',
+        'card-zoom group flex h-full flex-col overflow-hidden rounded-2xl border border-cream/10 bg-charcoal-panel',
         className
       )}
       initial={{ opacity: 0, y: 32 }}
@@ -16,11 +23,17 @@ export default function DishCard({ dish, className }) {
     >
       {dish.image ? (
         <div className="relative aspect-[4/3] overflow-hidden">
-          <motion.img
+          <img
             src={dish.image}
-            alt={dish.name}
+            srcSet={dishSrcSet(dish.image)}
+            sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 85vw"
+            alt=""
+            width={900}
+            height={675}
+            fetchPriority="low"
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            decoding="async"
+            className="card-media h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-charcoal-panel/90 via-transparent to-transparent" />
         </div>
@@ -38,6 +51,6 @@ export default function DishCard({ dish, className }) {
           {dish.spicy ? <Badge variant="spicy">Spicy</Badge> : null}
         </div>
       </div>
-    </motion.article>
+    </m.article>
   );
 }

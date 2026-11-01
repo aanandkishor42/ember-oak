@@ -2,13 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>EMBER & OAK | Wood-Fired Fine Dining</title>
     <meta
       name="description"
       content="EMBER & OAK is a modern fire kitchen. Wood-fired dishes, oak smoke and open flame — fine dining, reinvented. Explore the menu or reserve a table."
     />
     <meta name="theme-color" content="#0F0D0C" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Ember &amp; Oak" />
 
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website" />
@@ -37,23 +42,134 @@
     />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/playfair-display-400-600-normal-latin.woff2"
+      crossorigin
     />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/inter-300-600-normal-latin.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&amp;fit=crop&amp;w=1600&amp;q=80"
+      imagesrcset="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&amp;fit=crop&amp;w=640&amp;q=80 640w, https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&amp;fit=crop&amp;w=960&amp;q=80 960w, https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&amp;fit=crop&amp;w=1280&amp;q=80 1280w, https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&amp;fit=crop&amp;w=1600&amp;q=80 1600w"
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "EMBER & OAK",
+        "description": "A modern fire kitchen. Wood-fired dishes, oak smoke and open flame in Portland's Old Mill District.",
+        "url": "https://emberandoak.com/",
+        "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
+        "servesCuisine": ["Wood-fired", "Contemporary American"],
+        "priceRange": "$$$",
+        "telephone": "+1-503-555-0182",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "128 Hearthstone Lane",
+          "addressLocality": "Portland",
+          "addressRegion": "OR",
+          "postalCode": "97209",
+          "addressCountry": "US"
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Tuesday", "Wednesday", "Thursday"],
+            "opens": "17:00",
+            "closes": "22:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Friday", "Saturday"],
+            "opens": "17:00",
+            "closes": "23:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "Sunday",
+            "opens": "17:00",
+            "closes": "21:00"
+          }
+        ]
+      }
+    </script>
 
     <style>
       html {
         background-color: #0f0d0c;
       }
+      #root {
+        min-height: 100vh;
+      }
+      /* Static boot splash: paints the brand before React boots (FCP/LCP friendly). */
+      .boot-splash {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        background: #0f0d0c;
+        color: #f5efe6;
+        font-family: Georgia, 'Times New Roman', serif;
+      }
+      .boot-splash svg {
+        width: 2rem;
+        height: 2rem;
+        color: #d9622b;
+      }
+      .boot-splash p {
+        margin: 0;
+        font-size: 2.25rem;
+        line-height: 1.1;
+        letter-spacing: 0.34em;
+        text-indent: 0.34em;
+      }
+      .boot-splash p + p {
+        color: #e87b4a;
+      }
+      .boot-splash em {
+        font-style: italic;
+      }
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="boot-splash" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+          />
+        </svg>
+        <p>EMBER</p>
+        <p>&amp; <em>OAK</em></p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
