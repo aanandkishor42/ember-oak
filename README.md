@@ -110,6 +110,19 @@ vercel --prod
 2. Import at [vercel.com/new](https://vercel.com/new) — Framework: **Vite**, Build Command: `npm run build`, Output Directory: `dist`.
 3. Or drag the `dist/` folder at [app.netlify.com/drop](https://app.netlify.com/drop).
 
+## Real email sending (free, optional)
+
+The reservation form is wired to a **Formspree** endpoint placeholder:
+
+- Form action: `https://formspree.io/f/YOUR_FORMSPREE_FORM_ID` (`src/components/sections/ReservationSection.jsx`)
+
+To go live with real reservations-by-email (free tier, no backend):
+
+1. Sign up free at [formspree.io](https://formspree.io).
+2. Create a new form (name: `Ember & Oak Reservation`).
+3. Copy your form endpoint ID (e.g. `https://formspree.io/f/abc123`).
+4. Replace `YOUR_FORMSPREE_FORM_ID` in the form action.
+
 ## How to Customize for a Client
 
 1. **Restaurant name / copy**: edit `src/data/site.js` and the copy inside `src/components/sections/*`.

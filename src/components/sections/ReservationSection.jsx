@@ -60,10 +60,14 @@ export default function ReservationSection() {
     if (Object.values(nextErrors).some((err) => err)) return;
 
     setStatus('loading');
+    const form = e.target;
+    form.action = 'https://formspree.io/f/YOUR_FORMSPREE_FORM_ID';
+    form.method = 'POST';
     setTimeout(() => {
+      form.submit();
       setConfirmed({ ...values });
       setStatus('success');
-    }, 1800);
+    }, 700);
   };
 
   const reset = () => {
@@ -183,6 +187,7 @@ export default function ReservationSection() {
                 </p>
 
                 <form className="mt-8 grid gap-5 sm:grid-cols-2" onSubmit={handleSubmit} noValidate>
+                  <input type="hidden" name="form-name" value="ember-oak-reservation" />
                   <div className="sm:col-span-2">
                     <Input
                       label="Full name"
