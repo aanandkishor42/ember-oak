@@ -28,10 +28,8 @@ export default function Navbar() {
   }, [mobileOpen]);
 
   const linkClass = ({ isActive }) =>
-    `relative py-2 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 after:absolute after:-bottom-0.5 after:h-px after:w-full after:origin-left after:bg-ember after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100 focus-visible:after:scale-x-100 ${
-      isActive
-        ? 'text-cream after:scale-x-100'
-        : 'text-cream-muted after:scale-x-0 hover:text-cream'
+    `group relative py-2 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 ${
+      isActive ? 'text-cream' : 'text-cream-muted hover:text-cream'
     }`;
 
   return (
@@ -63,7 +61,17 @@ export default function Navbar() {
         <div className="hidden items-center gap-9 md:flex">
           {NAV_LINKS.map((link) => (
             <NavLink key={link.to} to={link.to} end={link.to === '/'} className={linkClass}>
-              {link.label}
+              {({ isActive }) => (
+                <span className="relative inline-block pb-2 -mr-[0.2em]">
+                  {link.label}
+                  <span
+                    aria-hidden="true"
+                    className={`absolute bottom-0 left-0 h-px w-full origin-left bg-ember transition-transform duration-300 ${
+                      isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                    }`}
+                  />
+                </span>
+              )}
             </NavLink>
           ))}
         </div>
