@@ -101,6 +101,9 @@ ember-oak/
 
 ## Deployment
 
+- **Live demo:** https://ember-oak-mauve.vercel.app
+- **Source:** https://github.com/aanandkishor42/ember-oak (branch `main`, auto-deploys to Vercel on push)
+
 ### Vercel (recommended)
 
 The project ships with `vercel.json` containing the SPA rewrite:
@@ -120,11 +123,11 @@ vercel --prod
 
 `public/_redirects` contains `/* /index.html 200` for drag-and-drop deploys.
 
-### Manual steps
+### Manual steps (already done for this repo)
 
-1. Push this repo to GitHub.
-2. Import at [vercel.com/new](https://vercel.com/new) — Framework: **Vite**, Build Command: `npm run build`, Output Directory: `dist`.
-3. Or drag the `dist/` folder at [app.netlify.com/drop](https://app.netlify.com/drop).
+1. ~~Push this repo to GitHub.~~ Done: https://github.com/aanandkishor42/ember-oak
+2. ~~Import at [vercel.com/new](https://vercel.com/new)~~ Done: auto-deploys to https://ember-oak-mauve.vercel.app
+3. Or drag the `dist/` folder at [app.netlify.com/drop](https://app.netlify.com/drop) for an instant Netlify URL.
 
 ## Real email sending (free, optional)
 
