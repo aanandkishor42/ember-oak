@@ -83,7 +83,8 @@ const MENU_ITEMS = [
   {
     id: 'm5',
     name: 'Tandoori Flame Chicken',
-    description: 'Fire-roasted tikka chicken over oak coals, yogurt-mint masala, charred onion, lemon rice.',
+    description:
+      'Fire-roasted tikka chicken over oak coals, yogurt-mint masala, charred onion, lemon rice.',
     price: 44,
     category: 'Mains',
     spicy: true,
@@ -96,6 +97,8 @@ const MENU_ITEMS = [
     price: 58,
     category: 'Mains',
     signature: true,
+    image:
+      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80',
   },
 
   // Desserts
